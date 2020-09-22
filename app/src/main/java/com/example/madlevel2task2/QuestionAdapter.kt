@@ -6,17 +6,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madlevel2task2.Question
+import com.example.madlevel2task2.R
+import com.example.madlevel2task2.databinding.ItemQuestionBinding
 
 class QuestionAdapter(private val questions: List<Question>) :
     RecyclerView.Adapter<QuestionAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                android.R.layout.simple_list_item_1,
-                parent,
-                false
-            )
+            LayoutInflater.from(parent.context).inflate(R.layout.item_question, parent, false)
         )
     }
 
@@ -30,10 +28,10 @@ class QuestionAdapter(private val questions: List<Question>) :
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val tvQuestion: TextView = itemView.findViewById(android.R.id.text1)
+        val binding = ItemQuestionBinding.bind(itemView)
 
         fun bind(question: Question) {
-            tvQuestion.text = question.question
+            binding.tvQuestion.text = question.question
         }
     }
 }
