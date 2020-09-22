@@ -33,6 +33,32 @@ class MainActivity : AppCompatActivity() {
         for (i in Question.QUESTIONS.indices) {
             questions.add(Question(Question.QUESTIONS[i], Question.ANSWERS[i]))
         }
+        questionAdapter.notifyDataSetChanged()
+        createItemTouchHelper().attachToRecyclerView(binding.rvQuestions)
+    }
 
+    private fun createItemTouchHelper(): ItemTouchHelper {
+
+        // Callback which is used to create the ItemTouch helper. Only enables left swipe.
+        // Use ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) to also enable right swipe.
+        val callback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+
+            // Enables or Disables the ability to move items up and down.
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            // Callback triggered when a user swiped an item.
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                questions.removeAt(position)
+                questionAdapter.notifyDataSetChanged()
+            }
+        }
+        return ItemTouchHelper(callback)
     }
 }
