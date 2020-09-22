@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.madlevel2task2.adapter.QuestionAdapter
 import com.example.madlevel2task2.databinding.ActivityMainBinding
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
@@ -55,8 +54,26 @@ class MainActivity : AppCompatActivity() {
             // Callback triggered when a user swiped an item.
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                questions.removeAt(position)
-                questionAdapter.notifyDataSetChanged()
+
+                if ((direction == ItemTouchHelper.LEFT && !questions[position].answer) ||
+                    (direction == ItemTouchHelper.RIGHT && questions[position].answer)
+                ) {
+                    Snackbar.make(
+                        rvQuestions,
+                        getString(R.string.correct, questions[position].answer),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    questions.removeAt(position)
+                    questionAdapter.notifyDataSetChanged()
+                } else {
+                    Snackbar.make(
+                        rvQuestions,
+                        getString(R.string.incorrect, questions[position].answer),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+
+                questionAdapter.notifyItemChanged(position)
             }
         }
         return ItemTouchHelper(callback)
